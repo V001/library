@@ -1,0 +1,15 @@
+insert into genres (id, title) values ('bfeb708a-611e-4bc4-b8a5-973a37e3e102', 'Crime');
+insert into genres (id, title) values ('442e2ad8-d584-4cc6-a7e9-904b5480bcfb', 'Action');
+insert into genres (id, title) values ('e7664a3a-f4a0-4ea1-940e-0561db1c3a63', 'Drama');
+insert into genres (id, title) values ('b7c84f77-a2ec-41e7-89ae-c7d90c3a5c6e', 'Horror');
+insert into genres (id, title) values ('5f6edfa3-69ae-46a8-9c6b-d4e214bbe977', 'Adventure');
+insert into genres (id, title) values ('e6ba4e98-3ee7-4a1b-9d56-cea8c79f50a1', 'War');
+insert into genres (id, title) values ('fa9e88ad-816e-4a98-9461-41fb513f0a67', 'Thriller');
+insert into genres (id, title) values ('d4cb3c08-7a84-480c-bbc4-c910a49c88e9', 'Musical');
+insert into genres (id, title) values ('4bdcb362-8b94-4694-b827-d0c41bbda10f', 'Documentary');
+insert into genres (id, title) values ('238553d0-52d0-4fbe-ba2d-88c85d2291d2', 'Comedy');
+insert into genres (id, title) values ('a5087739-f0f1-4945-80b1-f192bf772d5d', 'Romance');
+insert into genres (id, title) values ('d0c2185a-20eb-4dec-90e4-67b333e02b5c', 'Fantasy');
+insert into genres (id, title) values ('f5d8ab4e-2671-44aa-a467-8273be5a6760', 'Musical');
+insert into genres (id, title) values ('ca01791a-9b69-4bdb-b5b5-ec9efdb0b43d', 'Sci-Fi');
+insert into genres (id, title) values ('5cb16d22-1339-47e6-a05d-d515953c7d89', 'Western');
