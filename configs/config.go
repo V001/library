@@ -1,4 +1,4 @@
-package conf
+package configs
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ type Config struct {
 }
 
 type DBConf struct {
-	URL string `envconfig:"URL"`
+	URL string `envconfig:"URL" default:"root:root@tcp(localhost:3306)/library?charset=utf8mb4&parseTime=True&loc=Local"`
 }
 
 type HTTPConf struct {
