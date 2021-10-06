@@ -50,8 +50,19 @@ func (s *Server) initRouting() {
 		})
 	})
 	s.HTTPServer.Get("/layout", func(c *fiber.Ctx) error {
-		return c.Render("index", fiber.Map{
+		return c.Render("books", fiber.Map{
 			"Title": "Hellow World222!",
 		}, "layouts/main")
 	})
+
+	s.HTTPServer.Get("/books/create", func(c *fiber.Ctx) error {
+		return c.Render("books-create", fiber.Map{
+			"Title": "Hellow World222!",
+		}, "layouts/main")
+	})
+	//s.HTTPServer.Post()
+	//s.HTTPServer.Get()
+	//s.HTTPServer.Delete()
+	//s.HTTPServer.Put()
+
 }

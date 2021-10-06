@@ -9,7 +9,6 @@ CREATE TABLE "books" (
                          "genre_id" uuid,
                          "publisher_id" uuid
 );
-
 CREATE TABLE "bookAuthor" (
                               "book_id" uuid,
                               "author_id" uuid

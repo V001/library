@@ -1,0 +1,39 @@
+{{template "partials/header" .}}
+<main class="flex-shrink-0">
+    <div class="container">
+        <div class="table-block mt-5">
+            <div class="table-header row ">
+                <h1 class="col-md-4">Книги</h1>
+                <a href="/books/create" class=" col-md-4 offset-md-4" style="text-align: right"><button type="button" class=" btn btn-primary">Добавить книгу</button></a>
+            </div>
+            <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                <table class="table table-bordered table-striped mb-0">
+                    <thead>
+                    <tr>
+                        <th scope="col">Заголовок</th>
+                        <th scope="col">Автор</th>
+                        <th scope="col">Опубликована</th>
+                        <th scope="col">Издатель</th>
+                        <th scope="col">страниц</th>
+                        <th scope="col">Зал</th>
+                        <th scope="col">Жанр</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>6</td>
+                        <td>7</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</main>
+{{template "partials/footer" .}}
