@@ -1,0 +1,14 @@
+{{ define "title" }}{{.Title}}{{ end }}
+
+{{ define "content" }}
+    <h2>{{.Title}}</h2>
+    {{range .Profiles}}
+        <p>{{ .Name }} has
+        <ul>
+            {{range .Hobbies}}
+                <li>{{ . }}</li>
+            {{end}}
+        </ul>
+    {{end}}
+{{ end }}
+

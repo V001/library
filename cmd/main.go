@@ -1,8 +1,7 @@
 package main
 
 import (
-	"github.com/v001/library/configs"
-	"github.com/v001/library/db"
+	"github.com/v001/library/conf"
 	"github.com/v001/library/transport/http"
 	"log"
 )
@@ -14,13 +13,7 @@ func main() {
 }
 
 func run() error {
-	conf := configs.Get()
-
-	//init DB
-	_, err := db.ConnectToDB(&conf.DB)
-	if err != nil {
-		return err
-	}
+	conf := conf.Get()
 
 	//init server
 	srv := http.NewServer()

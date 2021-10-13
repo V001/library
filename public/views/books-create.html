@@ -1,0 +1,242 @@
+{{template "partials/header" .}}
+<main class="flex-shrink-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="mb-3">Добавление книги</h4>
+                <form class="needs-validation" novalidate="">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName">Название</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="" value="" required="">
+                            <div class="invalid-feedback">
+                                Valid first name is required.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="author">Автор</label>
+                            <button hidden id="authorModelBtn" type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#exampleModalCenter">
+                                Launch demo modal
+                            </button>
+                            <select class="custom-select d-block w-100" id="author"
+                                    onchange="CheckAuthorSelector(this)">
+                                <option value="">Choose...</option>
+                                <option>Добавить</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="publisher_place">Место публикации</label>
+                        <input type="text" class="form-control" id="publisher_place" placeholder="" value=""
+                               required="">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="published_time">Дата публикации</label>
+                            <input type="date" class="form-control" id="published_time" placeholder="" value=""
+                                   required="">
+                            <div class="invalid-feedback">
+                                Valid first name is required.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="author">Издательство</label>
+                            <select class="custom-select d-block w-100" id="publisher" required="">
+                                <option value="">Choose...</option>
+                                <option>Добавить</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label for="genre">Жанр</label>
+                            <select class="custom-select d-block w-100" id="genre" required="">
+                                <option value="">Choose...</option>
+                                <option>Добавить</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a valid country.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="hall">Зал</label>
+                            <select class="custom-select d-block w-100" id="hall" required="">
+                                <option value="">Choose...</option>
+                                <option>Добавить</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid state.
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="page_cnt">Кол-во страниц</label>
+                            <input type="number" class="form-control" id="page_cnt" placeholder="" required="">
+                            <div class="invalid-feedback">
+                                Zip code required.
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="mb-4">
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    function CheckAuthorSelector(selector) {
+        if (selector.value === "Добавить") {
+            $('#AddAuthorModal').modal("show")
+        }
+    }
+
+    $('#publisher').change(function () {
+        //this is just getting the value that is selected
+        if ($(this).val() === "Добавить") {
+            $('#publisherAddModal').modal('show');
+        }
+    });
+
+    $('#genre').change(function () {
+        //this is just getting the value that is selected
+        if ($(this).val() === "Добавить") {
+            $('#genreModal').modal('show');
+        }
+    });
+
+    $('#hall').change(function () {
+        if ($(this).val() === "Добавить") {
+            $('#hallModal').modal('show');
+        }
+    });
+</script>
+
+
+<div class="modal fade" id="AddAuthorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Добавить автора</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <label for="authorModalFio">ФИО автора</label>
+                        <input type="text" class="form-control" id="authorModalFio" placeholder="" value="" required="">
+                        <div class="invalid-feedback">
+                            Valid first name is required.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="genreModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Добавить жанр</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <label for="genreModalTitle">Название жанра</label>
+                        <input type="text" class="form-control" id="genreModalTitle" placeholder="" value=""
+                               required="">
+                        <div class="invalid-feedback">
+                            Valid first name is required.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="hallModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Добавить читальный зал</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <label for="hallAddTitle">Название читального зала</label>
+                        <input type="text" class="form-control" id="hallAddTitle" placeholder="" value="" required="">
+                        <div class="invalid-feedback">
+                            Valid first name is required.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="publisherAddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Добавить Издателя</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <label for="publisherAddTitle">Название издателя</label>
+                        <input type="text" class="form-control" id="publisherAddTitle" placeholder="" value=""
+                               required="">
+                        <div class="invalid-feedback">
+                            Valid first name is required.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{{template "partials/footer" .}}
