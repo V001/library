@@ -1,6 +1,6 @@
 package model
 
 type ReaderHall struct {
-	ID    string
+	ID    uint `gorm:"primaryKey"`
 	Title string
 }

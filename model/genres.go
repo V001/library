@@ -1,6 +1,6 @@
 package model
 
 type Genre struct {
-	ID    string
+	ID    uint `gorm:"primaryKey"`
 	Title string
 }

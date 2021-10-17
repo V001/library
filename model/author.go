@@ -3,7 +3,7 @@ package model
 import "time"
 
 type Author struct {
-	ID        string
+	ID        uint `gorm:"primaryKey"`
 	Fio       string
 	CreatedAt time.Time
 }

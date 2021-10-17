@@ -3,7 +3,7 @@ package model
 import "time"
 
 type Reader struct {
-	ID       string
+	ID       uint `gorm:"primaryKey"`
 	Fio      string
 	Birthday time.Time
 	Phone    string

@@ -3,7 +3,7 @@ package model
 import "time"
 
 type Book struct {
-	ID             string
+	ID             uint `gorm:"primaryKey"`
 	Title          string
 	PublishedTime  time.Time
 	PublisherPlace string
