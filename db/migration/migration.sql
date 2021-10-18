@@ -52,7 +52,6 @@ CREATE TABLE  if not exists  `books_readers`
     `id`          int PRIMARY KEY AUTO_INCREMENT,
     `book_id`     int,
     `reader_id`   int,
-
     `taken_at`    timestamp NOT NULL,
     `returned_at` timestamp NOT NULL,
     `created_at`  timestamp NOT NULL DEFAULT (now()),

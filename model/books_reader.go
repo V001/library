@@ -3,6 +3,7 @@ package model
 import "time"
 
 type BookReader struct {
+	ID         uint
 	BookID     uint
 	ReaderID   uint
 	TakenAt    time.Time
