@@ -1,6 +1,9 @@
 package http
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+	"os"
+)
 
 func (s *Server) initRouting() {
 	v1 := s.HTTPServer.Group("/api/v1")
@@ -45,16 +48,21 @@ func (s *Server) initRouting() {
 	reader.Get("/:id", s.h.Reader.GetByID)
 	reader.Post("/", s.h.Reader.Save)
 
-	s.HTTPServer.Static("/", "./public")
+	wd, _ := os.Getwd()
+	s.HTTPServer.Static("/", wd+"/public")
 
 	s.HTTPServer.Get("/", func(c *fiber.Ctx) error {
-		// Render index
-		return ctx.Render("index", fiber.Map{
-			"Title": "Hello, World!",
-		})
-	})
-	s.HTTPServer.Get("/layout", func(c *fiber.Ctx) error {
 		return c.Render("index", fiber.Map{
+			"Title": "Hellow World222!",
+		}, "layouts/main")
+	})
+	s.HTTPServer.Get("/book/create", func(c *fiber.Ctx) error {
+		return c.Render("books-create", fiber.Map{
+			"Title": "Hellow World222!",
+		}, "layouts/main")
+	})
+	s.HTTPServer.Get("/reports", func(c *fiber.Ctx) error {
+		return c.Render("reports", fiber.Map{
 			"Title": "Hellow World222!",
 		}, "layouts/main")
 	})

@@ -19,7 +19,7 @@ type DBConf struct {
 type HTTPConf struct {
 	TLSEnable      bool   `envconfig:"TLS_ENABLE" `
 	Enable         bool   `envconfig:"ENABLE" default:"true"`
-	Port           string `envconfig:"PORT" default:":8000"`
+	Port           string `envconfig:"PORT" default:":9090"`
 	TLSKeyAddress  string `envconfig:"TLS_KEY_ADDRESS"`
 	TLSCertAddress string `envconfig:"TLS_CERT_ADDRESS"`
 }
