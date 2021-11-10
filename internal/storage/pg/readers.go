@@ -1,4 +1,4 @@
-package repository
+package pg
 
 import (
 	"github.com/v001/library/model"
@@ -9,20 +9,16 @@ type ReaderRepository struct {
 	db *gorm.DB
 }
 
+func NewReaderRepository(db *gorm.DB) *ReaderRepository {
+	return &ReaderRepository{db: db}
+}
+
 func (r *ReaderRepository) Create(item model.Reader) (uint, error) {
 	if err := r.db.Create(&item).Error; err != nil {
 		return 0, err
 	}
 	r.db.Last(&item)
 	return item.ID, nil
-}
-
-type IReaderRepository interface {
-	List() ([]model.Reader, error)
-	GetByID(ID string) (model.Reader, error)
-	Update(Reader model.Reader) error
-	Delete(ID string) error
-	Create(item model.Reader) (uint, error)
 }
 
 func (r *ReaderRepository) List() ([]model.Reader, error) {
@@ -33,7 +29,7 @@ func (r *ReaderRepository) List() ([]model.Reader, error) {
 	return items, nil
 }
 
-func (r *ReaderRepository) GetByID(ID string) (model.Reader, error) {
+func (r *ReaderRepository) GetByID(ID uint) (model.Reader, error) {
 	var item model.Reader
 	if err := r.db.First(&item, ID).Error; err != nil {
 		return item, err

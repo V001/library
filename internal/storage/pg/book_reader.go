@@ -1,4 +1,4 @@
-package repository
+package pg
 
 import (
 	"github.com/v001/library/model"
@@ -7,6 +7,10 @@ import (
 
 type BookReaderRepository struct {
 	db *gorm.DB
+}
+
+func NewBookReaderRepository(db *gorm.DB) *BookReaderRepository {
+	return &BookReaderRepository{db: db}
 }
 
 func (r *BookReaderRepository) List() ([]model.BookReader, error) {
@@ -38,12 +42,4 @@ func (r *BookReaderRepository) Create(item model.BookReader) (uint, error) {
 
 func (r *BookReaderRepository) Delete(ID uint) error {
 	return r.db.Where("id = ?", ID).Delete(&model.BookReader{}).Error
-}
-
-type IBookReaderRepository interface {
-	List() ([]model.BookReader, error)
-	GetByID(ID uint) (model.BookReader, error)
-	Update(BookReader model.BookReader) error
-	Create(item model.BookReader) (uint, error)
-	Delete(ID uint) error
 }

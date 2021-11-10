@@ -1,8 +1,7 @@
-package repository
+package pg
 
 import (
 	"github.com/v001/library/configs"
-	db2 "github.com/v001/library/db"
 	"github.com/v001/library/model"
 	"testing"
 )
@@ -10,7 +9,7 @@ import (
 func TestAuthorRepository_Create(t *testing.T) {
 	cfg := configs.Get()
 	var err error
-	dbCon, err := db2.CreateConnection(cfg)
+	dbCon, err := Dial(cfg)
 	if err != nil {
 		t.Error(err)
 	}

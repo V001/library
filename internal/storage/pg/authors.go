@@ -1,4 +1,4 @@
-package repository
+package pg
 
 import (
 	"github.com/v001/library/model"
@@ -11,14 +11,6 @@ type AuthorRepository struct {
 
 func NewAuthorRepository(db *gorm.DB) *AuthorRepository {
 	return &AuthorRepository{db: db}
-}
-
-type IAuthorRepository interface {
-	AuthorsList() ([]model.Author, error)
-	GetByID(ID uint) (model.Author, error)
-	AuthorUpdate(author model.Author) error
-	AuthorDelete(ID uint) error
-	Create(item model.Author) (uint, error)
 }
 
 func (r *AuthorRepository) Create(item model.Author) (uint, error) {

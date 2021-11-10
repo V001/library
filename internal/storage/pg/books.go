@@ -1,8 +1,7 @@
-package repository
+package pg
 
 import (
 	"github.com/v001/library/model"
-	"github.com/v001/library/models"
 	"gorm.io/gorm"
 )
 
@@ -10,12 +9,8 @@ type BookRepository struct {
 	DB *gorm.DB
 }
 
-type IBookRepository interface {
-	Create(book model.Book) (uint, error)
-	List() ([]model.Book, error)
-	GetByID(ID uint) (model.Book, error)
-	Update(book model.Book) error
-	Delete(ID string) error
+func NewBookRepository(DB *gorm.DB) *BookRepository {
+	return &BookRepository{DB: DB}
 }
 
 func (r *BookRepository) Create(book model.Book) (uint, error) {

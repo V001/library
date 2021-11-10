@@ -1,4 +1,4 @@
-package repository
+package pg
 
 import (
 	"github.com/v001/library/model"
@@ -9,10 +9,8 @@ type BookAuthorRepository struct {
 	db *gorm.DB
 }
 
-type IBookAuthorRepository interface {
-	List() ([]model.BookAuthor, error)
-	Create(BookAuthor model.BookAuthor) error
-	Delete(ID string) error
+func NewBookAuthorRepository(db *gorm.DB) *BookAuthorRepository {
+	return &BookAuthorRepository{db: db}
 }
 
 func (r *BookAuthorRepository) List() ([]model.BookAuthor, error) {
@@ -23,12 +21,12 @@ func (r *BookAuthorRepository) List() ([]model.BookAuthor, error) {
 	return items, nil
 }
 
-func (r *BookAuthorRepository) Create(item model.BookAuthor) error {
+func (r *BookAuthorRepository) Create(item model.BookAuthor) (uint, error) {
 	if err := r.db.Create(&item).Error; err != nil {
-		return err
+		return 0, err
 	}
 	r.db.Last(&item)
-	return nil
+	return 0, nil
 }
 
 func (r *BookAuthorRepository) Delete(ID string) error {
