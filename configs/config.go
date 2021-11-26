@@ -15,7 +15,7 @@ type Config struct {
 type DBConf struct {
 	User     string `envconfig:"USER" default:"root"`
 	Password string `envconfig:"PASSWORD" default:"root"`
-	URL      string `envconfig:"URL" default:"localhost:3306"`
+	URL      string `envconfig:"URL" default:"localhost"`
 	DBName   string `envconfig:"DBNAME" default:"library"`
 	DSN      string `envconfig:"DSN" default:"root:root@tcp(localhost:3306)/library?charset=utf8mb4&parseTime=True&loc=Local"`
 }
