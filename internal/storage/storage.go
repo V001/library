@@ -19,6 +19,7 @@ type Storage struct {
 	Publisher  IPublisherRepository
 	ReaderHall IReaderHallRepository
 	Readers    IReaderRepository
+	Reports    IReportRepository
 }
 
 func New(ctx context.Context, cfg *configs.Config) (*Storage, error) {
@@ -50,6 +51,7 @@ func New(ctx context.Context, cfg *configs.Config) (*Storage, error) {
 		storage.Publisher = pg.NewPublisherRepository(pgDB)
 		storage.ReaderHall = pg.NewReaderHallRepository(pgDB)
 		storage.Readers = pg.NewReaderRepository(pgDB)
+		storage.Reports = pg.NewReportRepo(pgDB)
 	}
 
 	return &storage, nil

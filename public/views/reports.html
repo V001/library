@@ -1,4 +1,236 @@
 {{template "partials/header" .}}
+<main class="flex-shrink-0">
+    <div class="container" style="padding-top:90px; ">
+        <div class="accordion accordion-flush" id="accordionFlushExample" style="box-shadow: 0 0 10px rgba(0,0,0,0.5);">
+            <h2 style="padding-left: 15px; padding-top: 10px">Отчеты </h2>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Количество выданных книг
+                    </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="report-year-picker">Выберите год</label>
+                                <select class="custom-select d-block w-100" id="report-year-picker" required="">
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please provide a valid state.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3" style="padding-top:12px">
+                                <button class="btn btn-primary btn-md btn-block" onclick="BooksCntByMonth()">
+                                    Сформировать
+                                </button>
+                            </div>
+                        </div>
+                        <table class="table table-hover" id="reports-book-cnt-per-month">
+                            <thead>
+                            <tr>
+                                <td>Период</td>
+                                <td>Количество</td>
+                            </tr>
+                            </thead>
+                            <tbody>
 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                        Самые старые книги
+                    </button>
+                </h2>
+                <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <table class="table table-hover" id="reports-oldest-books">
+                            <thead>
+                            <tr>
+                                <td>Название</td>
+                                <td>Возраст</td>
+                                <td>Читальный зал</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseThree" aria-expanded="false"
+                            aria-controls="flush-collapseThree">
+                        Читальный зал с опр жанром
+                    </button>
+                </h2>
+                <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="genre-picker">Выберите жанр</label>
+                                <select multiple class="custom-select d-block w-100" id="genre-picker" required="">
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3" style="padding-top:12px">
+                                <button class="btn btn-primary btn-md btn-block" onclick="HallByGenre()">
+                                    Сформировать
+                                </button>
+                            </div>
+                        </div>
+                        <table class="table table-hover" id="reports-hall-by-genre">
+                            <thead>
+                            <tr>
+                                <td>читальный зал</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="flush-heading4">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapse4" aria-expanded="false" aria-controls="flush-collapse4">
+                        5 лучших книг
+                    </button>
+                </h2>
+                <div id="flush-collapse4" class="accordion-collapse collapse" aria-labelledby="flush-heading4"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <table class="table table-hover" id="reports-bestsellers">
+                            <thead>
+                            <tr>
+                                <td>Книга</td>
+                                <td>Кол-во</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    let host_v1 = "http://localhost:8000/api/v1"
+
+    async function sendPostRequest(method, url, data) {
+        let response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        })
+        return await response.json();
+    }
+
+
+
+    function GenreList() {
+        let url = host_v1 + "/genres"
+        sendPostRequest('GET', url)
+            .then((data) => {
+                data.forEach((el) =>  $('#genre-picker').prepend($(`<option value="${el.ID}">${el.title}</option>`)) )
+            })
+    }
+
+    function BookCntByYear() {
+        let url = host_v1 + "/reports/book-cnt-by-year"
+        sendPostRequest('GET', url)
+            .then((data) => {
+                data.forEach((el) => $('#report-year-picker').prepend($(`<option value="${el.period}">${el.period} (${el.count})</option>`)))
+            })
+    }
+
+
+    function BooksCntByMonth() {
+        let year = $('#report-year-picker').val()
+        $('#reports-book-cnt-per-month tbody').empty()
+        let url = host_v1 + "/reports/book-cnt-by-month/" + year
+        sendPostRequest('GET', url)
+            .then((data) => {
+                data.map((el) => {
+                    $('#reports-book-cnt-per-month tbody').append(`<tr>
+                        <td>${el.period}</td>
+                        <td>${el.count}</td>
+                    </tr>`)
+                })
+            })
+    }
+
+    function PopulatedBooks() {
+        let url = host_v1 + "/reports/top-populated-books"
+        sendPostRequest('GET', url)
+            .then((data) => {
+                data.map((el) => {
+                    $('#reports-bestsellers tbody').append(`<tr>
+                        <td>${el.book_title}</td>
+                        <td>${el.taken_cnt}</td>
+                    </tr>`)
+                })
+            })
+    }
+
+    function OldestBooks() {
+        let url = host_v1 + "/reports/oldest-book"
+        sendPostRequest('GET', url)
+            .then((data) => {
+                data.map((el) => {
+                    $('#reports-oldest-books tbody').append(`<tr>
+                        <td>${el.book_title}</td>
+                        <td>${el.age}</td>
+                        <td>${el.hall_title}</td>
+                    </tr>`)
+                })
+            })
+    }
+
+    function HallByGenre() {
+        let genres = $('#genre-picker').val().toString()
+        let url = host_v1 + "/reports/hall-by-genre?genres=" + genres
+        $('#reports-hall-by-genre tbody').empty()
+        console.log(genres)
+        sendPostRequest('GET', url)
+            .then((data) => {
+                data.map((el) => {
+                    $('#reports-hall-by-genre tbody').append(`<tr>
+                        <td>${el}</td>
+                    </tr>`)
+                })
+            })
+    }
+
+
+    $(document).ready(function () {
+        // BooksCntByMonth()
+        OldestBooks()
+        PopulatedBooks()
+        HallByGenre()
+        BookCntByYear()
+        GenreList()
+    })
+
+</script>
 
 {{template "partials/footer" .}}

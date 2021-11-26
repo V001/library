@@ -5,7 +5,7 @@ CREATE TABLE if not exists `books`
 (
     `id`              int PRIMARY KEY AUTO_INCREMENT,
     `title`           varchar(255) NOT NULL,
-    `published_time`  timestamp    NOT NULL,
+    `published_time`  date    NOT NULL,
     `published_place` varchar(255) NOT NULL,
     `page_cnt`        integer      NOT NULL,
     `hall_id`         int,
@@ -52,15 +52,15 @@ CREATE TABLE  if not exists  `books_readers`
     `id`          int PRIMARY KEY AUTO_INCREMENT,
     `book_id`     int,
     `reader_id`   int,
-    `taken_at`    timestamp NOT NULL,
-    `returned_at` timestamp NOT NULL,
+    `taken_at`    date NOT NULL,
+    `returned_at` date ,
     `created_at`  timestamp NOT NULL DEFAULT (now()),
     `updated_at`  timestamp NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE if not exists  `publishers`
 (
-    `id`    int PRIMARY KEY,
+    `id`    int PRIMARY KEY AUTO_INCREMENT,
     `title` varchar(255)
 );
 

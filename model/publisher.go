@@ -1,6 +1,7 @@
 package model
 
 type Publisher struct {
-	ID    uint `gorm:"primaryKey"`
-	Title string
+	//gorm.Model
+	ID    uint   `gorm:"primaryKey" json:"ID"`
+	Title string `json:"title"`
 }

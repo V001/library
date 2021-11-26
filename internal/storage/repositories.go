@@ -16,17 +16,26 @@ type IBookAuthorRepository interface {
 	Delete(ID string) error
 }
 
+type IReportRepository interface {
+	BookCntByMonth(year string) ([]model.BookCntInInterval, error)
+	BooksCntPerYear() ([]model.BookCntInInterval, error)
+	OldestBooksByHalls() ([]model.OldestBook, error)
+	TopPopulatedBooks() ([]model.PopulatedBooks, error)
+	HallIDByBooksGenres(genres []string) ([]string, error)
+}
+
 type IBookReaderRepository interface {
 	List() ([]model.BookReader, error)
-	GetByID(ID uint) (model.BookReader, error)
+	GetByID(ID int) (model.BookReader, error)
+	BookListNotReturned(readerID int) ([]model.BookReader, error)
 	Update(BookReader model.BookReader) error
-	Create(item model.BookReader) (uint, error)
+	Create(item model.CreateBookReader) (uint, error)
 	Delete(ID uint) error
 }
 
 type IBookRepository interface {
 	Create(book model.Book) (uint, error)
-	List() ([]model.Book, error)
+	List() ([]model.BookListResponse, error)
 	GetByID(ID uint) (model.Book, error)
 	Update(book model.Book) error
 	Delete(ID string) error

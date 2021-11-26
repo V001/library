@@ -1,9 +1,18 @@
 version: '3.1'
 
 services:
+  nginx:
+    image: nginx:alpine
+    hostname: nginx
+    restart: always
+    ports:
+      - "80:80"
+    networks:
+      - library
   db:
     image: mysql
     restart: always
+    hostname: db
     ports:
       - "3306:3306"
     environment:
@@ -11,9 +20,29 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
       MYSQL_DATABASE: library
-
+    networks:
+      - library
+  app:
+    hostname: app
+    ports:
+      - "8000:8000"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      PORT: :8000
+      USER: admin
+      PASSWORD: admin
+      URL: db
+    networks:
+      - library
   adminer:
     image: adminer
     restart: always
     ports:
       - "8080:8080"
+    networks:
+      - library
+networks:
+  library:
+    driver: bridge

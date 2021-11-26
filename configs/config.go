@@ -13,13 +13,17 @@ type Config struct {
 }
 
 type DBConf struct {
-	URL string `envconfig:"URL" default:"root:root@tcp(localhost:3306)/library?charset=utf8mb4&parseTime=True&loc=Local"`
+	User     string `envconfig:"USER" default:"root"`
+	Password string `envconfig:"PASSWORD" default:"root"`
+	URL      string `envconfig:"URL" default:"localhost:3306"`
+	DBName   string `envconfig:"DBNAME" default:"library"`
+	DSN      string `envconfig:"DSN" default:"root:root@tcp(localhost:3306)/library?charset=utf8mb4&parseTime=True&loc=Local"`
 }
 
 type HTTPConf struct {
-	TLSEnable      bool   `envconfig:"TLS_ENABLE" `
+	TLSEnable      bool   `envconfig:"TLS_ENABLE"`
 	Enable         bool   `envconfig:"ENABLE" default:"true"`
-	Port           string `envconfig:"PORT" default:":9090"`
+	Port           string `envconfig:"PORT" default:":8000"`
 	TLSKeyAddress  string `envconfig:"TLS_KEY_ADDRESS"`
 	TLSCertAddress string `envconfig:"TLS_CERT_ADDRESS"`
 }

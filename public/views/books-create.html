@@ -4,22 +4,21 @@
         <div class="row">
             <div class="col-md-12">
                 <h4 class="mb-3">Добавление книги</h4>
-                <form class="needs-validation" novalidate="">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="firstName">Название</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="" value="" required="">
+                            <label for="bookTitle">Название</label>
+                            <input type="text" class="form-control" id="bookTitle" placeholder="" value="" required="">
                             <div class="invalid-feedback">
                                 Valid first name is required.
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="author">Автор</label>
-                            <button hidden id="authorModelBtn" type="button" class="btn btn-primary" data-toggle="modal"
+                            <button hidden  id="authorModelBtn" type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#exampleModalCenter">
                                 Launch demo modal
                             </button>
-                            <select class="custom-select d-block w-100" id="author"
+                            <select multiple class="custom-select d-block w-100" id="author"
                                     onchange="CheckAuthorSelector(this)">
                                 <option value="">Choose...</option>
                                 <option>Добавить</option>
@@ -81,26 +80,87 @@
                         </div>
                     </div>
                     <hr class="mb-4">
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
-                </form>
+                    <button class="btn btn-primary btn-lg btn-block" onclick="saveBook()" >Сохранить</button>
             </div>
         </div>
     </div>
 </main>
 
 <script>
+    let host_v1 = "http://localhost:8000/api/v1"
+
+    function saveBook() {
+        sendPostRequest('POST', host_v1 + "/books", {
+            title: $("#bookTitle").val(),
+            published_time: $("#published_time").val(),
+            published_place: $("#publisher_place").val(),
+            page_cnt: parseInt($("#page_cnt").val()),
+            hall_id: $("#hall").val(),
+            genre_id: $("#genre").val(),
+            publisher_id: $("#publisher").val(),
+            authors: $("#author").val()
+        }).then((data) => {
+            console.log(data)
+        })
+    }
+
     function CheckAuthorSelector(selector) {
         if (selector.value === "Добавить") {
             $('#AddAuthorModal').modal("show")
         }
     }
 
+    async function sendPostRequest(method, url, data) {
+        let response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        })
+        return await response.json();
+    }
+
+    function AuthorUpdateList() {
+        let url = host_v1 + "/authors"
+        sendPostRequest('GET', url)
+            .then((data) => {
+                data.forEach((el) =>  $('#author').prepend($(`<option value="${el.ID}">${el.fio}</option>`)) )
+            })
+    }
+
+    function saveAuthor() {
+        sendPostRequest('POST', host_v1 + "/authors", {
+            fio: $("#authorModalFio").val()
+        }).then((data) => {
+            AuthorUpdateList()
+            $('#AddAuthorModal').modal("toggle")
+        })
+    }
+
     $('#publisher').change(function () {
-        //this is just getting the value that is selected
         if ($(this).val() === "Добавить") {
             $('#publisherAddModal').modal('show');
         }
     });
+
+    function PublisherUpdateLIst() {
+        let url = host_v1 + "/publishers"
+        sendPostRequest('GET', url)
+            .then((data) => {
+                data.forEach((el) =>  $('#publisher').prepend($(`<option value="${el.ID}">${el.title}</option>`)) )
+            })
+    }
+
+    function savePublisher() {
+        sendPostRequest('POST', host_v1 + "/publishers", {
+            title: $("#publisherAddTitle").val()
+        }).then((data) => {
+            PublisherUpdateLIst()
+            $('#publisherAddModal').modal("toggle")
+        })
+    }
+
 
     $('#genre').change(function () {
         //this is just getting the value that is selected
@@ -109,11 +169,52 @@
         }
     });
 
+    function GenreUpdateList() {
+        let url = host_v1 + "/genres"
+        sendPostRequest('GET', url)
+            .then((data) => {
+                data.forEach((el) =>  $('#genre').prepend($(`<option value="${el.ID}">${el.title}</option>`)) )
+            })
+    }
+    function saveGenre() {
+        sendPostRequest('POST', host_v1 + "/genres", {
+            title: $("#genreModalTitle").val()
+        }).then((data) => {
+            GenreUpdateList()
+            $('#genreModal').modal("toggle")
+        })
+    }
+
     $('#hall').change(function () {
         if ($(this).val() === "Добавить") {
             $('#hallModal').modal('show');
         }
     });
+
+    function HallUpdateList() {
+        let url = host_v1 + "/reader-halls"
+        sendPostRequest('GET', url)
+            .then((data) => {
+                data.forEach((el) =>  $('#hall').prepend($(`<option value="${el.ID}">${el.title}</option>`)) )
+            })
+    }
+    function saveHall() {
+        sendPostRequest('POST', host_v1 + "/reader-halls", {
+            title: $("#hallAddTitle").val()
+        }).then((data) => {
+            HallUpdateList()
+            $('#hallModal').modal("toggle")
+        })
+    }
+
+    $(document).ready(function (){
+        AuthorUpdateList()
+        PublisherUpdateLIst()
+        HallUpdateList()
+        GenreUpdateList()
+    })
+
+
 </script>
 
 
@@ -122,7 +223,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Добавить автора</h5>
+                <h5 class="modal-title" id="authorModalTitle">Добавить автора</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -133,14 +234,14 @@
                         <label for="authorModalFio">ФИО автора</label>
                         <input type="text" class="form-control" id="authorModalFio" placeholder="" value="" required="">
                         <div class="invalid-feedback">
-                            Valid first name is required.
+                            Неправильно фио
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary" onclick="saveAuthor()">Сохранить автора</button>
             </div>
         </div>
     </div>
@@ -170,7 +271,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary">Сохранить</button>
+                <button type="button" class="btn btn-primary" onclick="saveGenre()">Сохранить</button>
             </div>
         </div>
     </div>
@@ -199,7 +300,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary">Сохранить</button>
+                <button type="button" class="btn btn-primary" onclick="saveHall()">Сохранить</button>
             </div>
         </div>
     </div>
@@ -229,14 +330,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary">Сохранить</button>
+                <button type="button" class="btn btn-primary" onclick="savePublisher()">Сохранить</button>
             </div>
         </div>
     </div>
 </div>
-
-
-
 
 
 {{template "partials/footer" .}}

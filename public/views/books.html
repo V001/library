@@ -4,10 +4,12 @@
         <div class="table-block mt-5">
             <div class="table-header row ">
                 <h1 class="col-md-4">Книги</h1>
-                <a href="/books/create" class=" col-md-4 offset-md-4" style="text-align: right"><button type="button" class=" btn btn-primary">Добавить книгу</button></a>
+                <a href="/books/create" class=" col-md-4 offset-md-4" style="text-align: right">
+                    <button type="button" class=" btn btn-primary">Добавить книгу</button>
+                </a>
             </div>
-            <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                <table class="table table-bordered table-striped mb-0">
+            <div class="table-wrapper-scroll-y my-custom-scrollbar" style="height: 400px">
+                <table class="table table-bordered table-striped mb-0" id="book-table">
                     <thead>
                     <tr>
                         <th scope="col">Заголовок</th>
@@ -17,23 +19,135 @@
                         <th scope="col">страниц</th>
                         <th scope="col">Зал</th>
                         <th scope="col">Жанр</th>
+                        <th scope="col">Читатель</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td>6</td>
-                        <td>7</td>
-                    </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
 
+
+    <div class="modal fade" id="addReaderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authorModalTitle">Выбрать читателя</h5>
+                    <button type="button" onclick="hideModal()" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="readers">Читатель</label>
+                            <select class="custom-select d-block w-100" id="readers" required="">
+                                <option>Добавить</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="hideModal()" >Закрыть</button>
+                    <button type="button" class="btn btn-primary" onclick="giveBook()">Выдать</button>
+                </div>
             </div>
         </div>
     </div>
 </main>
+<script>
+    function hideModal() {
+        $('#addReaderModal').modal('toggle')
+        $('tr[active=true]').removeAttr('active')
+    }
+
+    function setActive(el) {
+        // $(el).closest('tr').setAttribute("active",true)
+        el.parentElement.parentElement.setAttribute("active", true)
+        $('#addReaderModal').modal('show');
+    }
+
+    function giveBook() {
+        sendPostRequest('POST', host_v1 + "/book-readers/give-book", {
+            reader_id: parseInt($("#readers").val()),
+            book_id: parseInt($('tr[active=true]').attr('id')),
+            book_title: $('tr[active=true]').find('.book_title').text()
+        }).then((data) => {
+            location.reload()
+            console.log(data)
+        })
+    }
+
+    function returnBook(id) {
+        sendPostRequest('POST', host_v1 + "/book-readers/return-book", {
+            book_reader_id: id,
+        }).then((data) => {
+            location.reload()
+            console.log(data)
+        })
+    }
+
+    let host_v1 = "http://localhost:8000/api/v1"
+
+    async function sendPostRequest(method, url, data) {
+        let response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        })
+        return await response.json();
+    }
+
+    function BooksUpdateList() {
+        let url = host_v1 + "/books"
+        sendPostRequest('GET', url)
+            .then((data) => {
+                data.map((el) => {
+                    let btnText
+                    if (el.readers !== undefined && el.readers.length > 0) {
+                        btnText = `<button class="btn btn-warning" onclick="returnBook(${el.book_reader_id})">Вернуть книгу</button>`
+                    } else {
+                        btnText = `<button class="btn btn-info" onclick="setActive(this)">Выдать книгу</button>`
+                    }
+                    $('#book-table tbody').append(`
+                    <tr id="${el.book_id}">
+                        <td class="book_title">${el.book_title}</td>
+                        <td>${el.authors}</td>
+                        <td>${el.published_time}</td>
+                        <td>${el.published_place}</td>
+                        <td>${el.page_cnt}</td>
+                        <td>${el.hall_title}</td>
+                        <td>${el.genre_title}</td>
+                        <td style="text-align: right">
+                            ${el.readers}
+                            ${btnText}
+                        </td>
+                    </tr>
+                    `)
+                })
+            })
+    }
+
+
+    function readersUpdateList() {
+        let url = host_v1 + "/readers"
+        sendPostRequest('GET', url)
+            .then((data) => {
+                data.forEach((el) => $('#readers').prepend($(`<option value="${el.ID}">${el.fio}</option>`)))
+            })
+    }
+
+    $(document).ready(function () {
+        BooksUpdateList()
+        readersUpdateList()
+    })
+
+
+</script>
+
 {{template "partials/footer" .}}

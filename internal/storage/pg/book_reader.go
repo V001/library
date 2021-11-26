@@ -3,6 +3,7 @@ package pg
 import (
 	"github.com/v001/library/model"
 	"gorm.io/gorm"
+	"time"
 )
 
 type BookReaderRepository struct {
@@ -21,23 +22,38 @@ func (r *BookReaderRepository) List() ([]model.BookReader, error) {
 	return items, nil
 }
 
-func (r *BookReaderRepository) GetByID(ID uint) (model.BookReader, error) {
-	if err := r.db.First(model.BookReader{}, ID).Error; err != nil {
+func (r *BookReaderRepository) BookListNotReturned(readerID int) ([]model.BookReader, error) {
+	var items []model.BookReader
+	if err := r.db.Table("books_readers").
+		Select("books.title as book_title").
+		Joins("join books on books.id = books_readers.book_id").
+		Where("books_readers.returned_at is null").
+		Where("books_readers.reader_id = ?", readerID).
+		Debug().
+		Find(&items).Error; err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+func (r *BookReaderRepository) GetByID(ID int) (model.BookReader, error) {
+	var resp model.BookReader
+	if err := r.db.Table("books_readers").First(&resp, ID).Error; err != nil {
 		return model.BookReader{}, err
 	}
-	return model.BookReader{}, nil
+	return resp, nil
 }
 
 func (r *BookReaderRepository) Update(BookReader model.BookReader) error {
-	r.db.First(&BookReader)
-	return r.db.Save(&BookReader).Error
+	return r.db.Table("books_readers").Save(&BookReader).Error
 }
 
-func (r *BookReaderRepository) Create(item model.BookReader) (uint, error) {
-	if err := r.db.Create(&item).Error; err != nil {
+func (r *BookReaderRepository) Create(item model.CreateBookReader) (uint, error) {
+	item.TakenAt = time.Now()
+	if err := r.db.Table("books_readers").Create(&item).Error; err != nil {
 		return 0, err
 	}
-	return item.ID, nil
+	return 0, nil
 }
 
 func (r *BookReaderRepository) Delete(ID uint) error {

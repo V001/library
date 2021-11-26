@@ -2,9 +2,10 @@ package http
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/template/html"
 	"github.com/v001/library/configs"
-	"github.com/v001/library/internal/transport/handlers"
+	"github.com/v001/library/internal/transport/http/handlers"
 	"os"
 )
 
@@ -22,11 +23,15 @@ func (s *Server) Run() error {
 	wd, _ := os.Getwd()
 
 	engine := html.New(wd+"/public/views", ".html")
-	engine.Reload(true)
-	engine.Debug(true)
+	//engine.Reload(true)
+	//engine.Debug(true)
 	s.HTTPServer = fiber.New(fiber.Config{
 		Views: engine,
 	})
+	s.HTTPServer.Use(cors.New(cors.Config{
+		AllowOrigins: "*",
+		AllowHeaders: "*",
+	}))
 	s.initRouting()
 
 	if s.config.HTTP.TLSEnable {

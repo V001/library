@@ -4,9 +4,10 @@ import (
 	"context"
 	"github.com/sirupsen/logrus"
 	"github.com/v001/library/configs"
+	service2 "github.com/v001/library/internal/service"
 	"github.com/v001/library/internal/storage"
-	"github.com/v001/library/internal/transport/handlers"
 	"github.com/v001/library/internal/transport/http"
+	"github.com/v001/library/internal/transport/http/handlers"
 	"log"
 )
 
@@ -25,8 +26,11 @@ func run() error {
 	}
 	l := logrus.New()
 	defer cancel()
+
+	service, err := service2.NewManager(repo)
+
 	if conf.HTTP.Enable {
-		hManager := handlers.New(l, repo)
+		hManager := handlers.New(l, repo, service)
 		//init server
 		srv := http.NewServer(hManager, conf)
 		if err := srv.Run(); err != nil {
